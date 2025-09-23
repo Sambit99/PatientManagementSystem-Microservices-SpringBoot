@@ -9,9 +9,8 @@ import lombok.Data;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Entity(name = "patients")
+@Entity
 @Data
-@Builder
 public class Patient {
 
     @Id
