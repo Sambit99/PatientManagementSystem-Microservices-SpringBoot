@@ -6,12 +6,16 @@ import com.pms.patientservice.service.PatientService;
 import com.pms.patientservice.util.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/patients")
@@ -29,7 +33,12 @@ public class PatientController {
     @PostMapping
     public ResponseEntity<Object> createNewPatient(HttpServletRequest request, @Valid @RequestBody PatientRequestDTO patientRequestDTO){
         PatientResponseDTO newPatient = patientService.createPatient(patientRequestDTO);
-
         return ApiResponse.Send(request,"New patient created successfully", HttpStatus.CREATED, newPatient);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updatePatient(HttpServletRequest request, @Validated({Default.class}) @RequestBody PatientRequestDTO patientRequestDTO, @PathVariable UUID id){
+        PatientResponseDTO patientResponseDTO = patientService.updatePatient(id,patientRequestDTO);
+        return ApiResponse.Send(request,"Patient updated successfully", HttpStatus.OK, patientResponseDTO);
     }
 }
