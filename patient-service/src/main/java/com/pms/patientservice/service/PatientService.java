@@ -44,9 +44,9 @@ public class PatientService {
 
     public PatientResponseDTO updatePatient(UUID id, PatientRequestDTO patientRequestDTO){
         Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new PatientNotFoundException("Patient not found with ID : "+id));
+                .orElseThrow(() -> new PatientNotFoundException("Patient not found with ID : "+ id));
 
-        boolean isEmailExist = patientRepository.existsByEmail(patientRequestDTO.getEmail());
+        boolean isEmailExist = patientRepository.existsByEmailAndIdNot(patientRequestDTO.getEmail(), id);
 
         if(isEmailExist){
             throw new EmailAlreadyExistException("A patient with this e-mail already exists " + patientRequestDTO.getEmail());
