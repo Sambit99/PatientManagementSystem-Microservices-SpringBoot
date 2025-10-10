@@ -2,6 +2,7 @@ package com.pms.patientservice.controller;
 
 import com.pms.patientservice.dto.PatientRequestDTO;
 import com.pms.patientservice.dto.PatientResponseDTO;
+import com.pms.patientservice.dto.validators.CreatePatientValidationGroup;
 import com.pms.patientservice.service.PatientService;
 import com.pms.patientservice.util.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +32,10 @@ public class PatientController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createNewPatient(HttpServletRequest request, @Valid @RequestBody PatientRequestDTO patientRequestDTO){
+    public ResponseEntity<Object> createNewPatient(
+            HttpServletRequest request,
+            @Validated({Default.class, CreatePatientValidationGroup.class})
+            @RequestBody PatientRequestDTO patientRequestDTO){
         PatientResponseDTO newPatient = patientService.createPatient(patientRequestDTO);
         return ApiResponse.Send(request,"New patient created successfully", HttpStatus.CREATED, newPatient);
     }
