@@ -6,10 +6,8 @@ import com.pms.patientservice.dto.validators.CreatePatientValidationGroup;
 import com.pms.patientservice.service.PatientService;
 import com.pms.patientservice.util.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -44,5 +42,11 @@ public class PatientController {
     public ResponseEntity<Object> updatePatient(HttpServletRequest request, @Validated({Default.class}) @RequestBody PatientRequestDTO patientRequestDTO, @PathVariable UUID id){
         PatientResponseDTO patientResponseDTO = patientService.updatePatient(id,patientRequestDTO);
         return ApiResponse.Send(request,"Patient updated successfully", HttpStatus.OK, patientResponseDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deletePatient(HttpServletRequest request, @PathVariable UUID id){
+        patientService.deletePatient(id);
+        return ApiResponse.Send(request,"Patient record deleted successfully",HttpStatus.NO_CONTENT,null);
     }
 }
