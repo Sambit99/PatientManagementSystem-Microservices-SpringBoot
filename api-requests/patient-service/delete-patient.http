@@ -1,0 +1,4 @@
+### DELETE request to delete patient record by Id
+DELETE http://localhost:8081/patients/2b156602-db28-44a7-a535-ad67102b457d
+
+###
