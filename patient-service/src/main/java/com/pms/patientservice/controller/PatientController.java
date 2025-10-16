@@ -5,6 +5,8 @@ import com.pms.patientservice.dto.PatientResponseDTO;
 import com.pms.patientservice.dto.validators.CreatePatientValidationGroup;
 import com.pms.patientservice.service.PatientService;
 import com.pms.patientservice.util.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +21,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/patients")
 @RequiredArgsConstructor
+@Tag(name = "Patient", description = "API for managing Patients")
 public class PatientController {
     private final PatientService patientService;
 
     @GetMapping
+    @Operation(summary = "Get Patients")
     public ResponseEntity<Object> getAllPatients(HttpServletRequest request){
         List<PatientResponseDTO> patients = patientService.getAllPatients();
         return ApiResponse.Send(request,"All patients details fetched successfully", HttpStatus.OK, patients);
@@ -30,6 +34,7 @@ public class PatientController {
     }
 
     @PostMapping
+    @Operation(summary = "Create a new patient")
     public ResponseEntity<Object> createNewPatient(
             HttpServletRequest request,
             @Validated({Default.class, CreatePatientValidationGroup.class})
@@ -39,12 +44,14 @@ public class PatientController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Update a patient")
     public ResponseEntity<Object> updatePatient(HttpServletRequest request, @Validated({Default.class}) @RequestBody PatientRequestDTO patientRequestDTO, @PathVariable UUID id){
         PatientResponseDTO patientResponseDTO = patientService.updatePatient(id,patientRequestDTO);
         return ApiResponse.Send(request,"Patient updated successfully", HttpStatus.OK, patientResponseDTO);
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete a patient")
     public ResponseEntity<Object> deletePatient(HttpServletRequest request, @PathVariable UUID id){
         patientService.deletePatient(id);
         return ApiResponse.Send(request,"Patient record deleted successfully",HttpStatus.NO_CONTENT,null);
