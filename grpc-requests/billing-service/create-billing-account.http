@@ -1,0 +1,10 @@
+### GRPC request to create billing account
+GRPC localhost:9002/BillingService/CreateBillingAccount
+
+{
+  "patientId" : "123e4567-e89b-12d3-a456-426614174000",
+  "name" : "John Doe",
+  "email" : "john.doe@example.com"
+}
+
+###
