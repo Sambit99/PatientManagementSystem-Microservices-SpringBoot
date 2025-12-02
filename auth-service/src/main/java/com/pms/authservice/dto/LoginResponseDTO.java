@@ -1,6 +1,5 @@
 package com.pms.authservice.dto;
 
-import lombok.Data;
 import lombok.Value;
 
 @Value
