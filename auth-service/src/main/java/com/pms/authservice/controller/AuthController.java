@@ -8,9 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,10 +27,25 @@ public class AuthController {
         Optional<String> tokenOptional = authService.authenticate(loginRequestDTO);
 
         if (tokenOptional.isEmpty()) {
-            return ApiResponse.Send(request,"fail", HttpStatus.UNAUTHORIZED, null);
+            return ApiResponse.Send(request,"wrong username/password", HttpStatus.UNAUTHORIZED, null);
         }
 
         String token = tokenOptional.get();
-        return ApiResponse.Send(request,"success", HttpStatus.OK, new HashMap<>(Map.of("token", token)));
+        return ApiResponse.Send(request,"logged in successfully", HttpStatus.OK, new HashMap<>(Map.of("token", token)));
+    }
+
+    @Operation(summary = "Validate token")
+    @GetMapping("/validate")
+    public ResponseEntity<Object> validate(HttpServletRequest request, @RequestHeader("Authorization") String authHeader) {
+
+        // Authorization : Bearer <token>
+        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ApiResponse.Send(request,"invalid token", HttpStatus.UNAUTHORIZED, null);
+        }
+
+        return authService.validateToken(authHeader.substring(7))
+                ? ApiResponse.Send(request,"valid token", HttpStatus.OK, null)
+                : ApiResponse.Send(request,"invalid token", HttpStatus.UNAUTHORIZED, null);
+
     }
 }
