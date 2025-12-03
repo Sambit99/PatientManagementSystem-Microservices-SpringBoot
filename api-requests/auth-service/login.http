@@ -7,4 +7,6 @@ Content-Type: application/json
     "password": "password123"
 }
 
+> {% client.global.set("authToken", response.body.data.token) %}
+
 ###
