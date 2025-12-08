@@ -7,16 +7,24 @@ spring:
   cloud:
     gateway:
       routes:
+        # Route for /api/auth/** to auth-service
+        - id: auth-service-route
+          uri: http://localhost:8084
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+
         # Route for /api/patients/** to patient-service
-        - id: patient_service_route
+        - id: patient-service-route
           uri: http://localhost:8081
           predicates:
             - Path=/api/patients/**
           filters:
-            - SetPath=/patients
+            - StripPrefix=1
 
         # Route for /api-docs/patients to patient-service /v3/api-docs
-        - id: api_docs_patient_route
+        - id: api-docs-patient-route
           uri: http://localhost:8081
           predicates:
             - Path=/api-docs/patients
