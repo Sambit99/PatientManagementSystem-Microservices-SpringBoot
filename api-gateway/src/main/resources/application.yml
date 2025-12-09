@@ -32,6 +32,14 @@ spring:
           filters:
             - SetPath=/v3/api-docs
 
+        # Route for /api-docs/auth to auth-service /v3/api-docs
+        - id: api-docs-auth-route
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api-docs/auth
+          filters:
+            - SetPath=/v3/api-docs
+
 auth:
   service:
     url: http://localhost:8084
