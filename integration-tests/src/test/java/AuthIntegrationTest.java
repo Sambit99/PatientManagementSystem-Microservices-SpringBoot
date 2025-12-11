@@ -12,6 +12,8 @@ class AuthIntegrationTest {
         RestAssured.baseURI = "http://localhost:4000";
     }
 
+    String token = "";
+
     @Test
     void shouldReturnOkWithValidToken() {
         String loginPayload = """
@@ -33,8 +35,30 @@ class AuthIntegrationTest {
                 .extract()
                 .response();
 
+        token = response.path("data.token").toString();
+
         System.out.println("Response: " + response.getBody().asString());
     }
 
+    @Test
+    void shouldReturnUnauthorizedOnInvalidLogin() {
+        String loginPayload = """
+                    {
+                        "email": "testuser@test.com",
+                        "password": "password12345"
+                    }
+                """;
 
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body(loginPayload)
+                .when()
+                .post("/auth/login")
+                .then()
+                .statusCode(401)
+                .extract()
+                .response();
+
+        System.out.println("Response: " + response.getBody().asString());
+    }
 }
