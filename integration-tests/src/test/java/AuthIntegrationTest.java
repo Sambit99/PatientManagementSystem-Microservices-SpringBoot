@@ -79,4 +79,19 @@ class AuthIntegrationTest {
 
         System.out.println("Response: " + response.getBody().asString());
     }
+
+    @Test
+    @Order(4)
+    void shouldReturnUnauthorizedOnInvalidToken() {
+        Response response = RestAssured.given()
+                .header("Authorization", "Bearer "+ "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0ZXN0dXNlckB0ZXN0LmNvbSIsInJvbGUiOiJBRE1JTiI").
+                when()
+                .get("/auth/validate")
+                .then()
+                .statusCode(401)
+                .extract()
+                .response();
+
+        System.out.println("Response: " + response.getBody().asString());
+    }
 }
