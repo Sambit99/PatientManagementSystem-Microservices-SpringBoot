@@ -57,4 +57,19 @@ class PatientIntegrationTest {
         System.out.println("Response: " + response.getBody().asString());
     }
 
+    @Test
+    @Order(3)
+    void shouldReturnUnauthorizedOnInvalidToken(){
+        Response response = RestAssured.given()
+                .header("Authorization", "Bearer "+ "IiOiJ0ZXN0dXNlckB0ZXN0LmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2NTU1NTQ1NiwiZXhwIjoxN")
+                .when()
+                .get("api/patients")
+                .then()
+                .statusCode(401)
+                .extract()
+                .response();
+
+        System.out.println("Response: " + response.getBody().asString());
+    }
+
 }
